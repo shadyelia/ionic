@@ -11,7 +11,7 @@ import * as runSequence from 'run-sequence';
 import * as semver from 'semver';
 import { obj } from 'through2';
 
-import { DIST_BUILD_UMD_BUNDLE_ENTRYPOINT, DIST_BUILD_ROOT, DIST_BUNDLE_ROOT, PROJECT_ROOT, SCRIPTS_ROOT, SRC_ROOT } from '../constants';
+import { DIST_BUILD_UMD_BUNDLE_ENTRYPOINT, DIST_BUILD_ROOT, DIST_BUNDLE_ROOT, DIST_BUILD_FESM_BUNDLE_ENTRYPOINT, PROJECT_ROOT, SCRIPTS_ROOT, SRC_ROOT } from '../constants';
 import { compileSass, copyFonts, createTimestamp, setSassIonicVersion, writePolyfills } from '../util';
 
 var promptAnswers;
@@ -204,6 +204,7 @@ task('release.prepareReleasePackage', (done: (err: any) => void) => {
           'release.fonts',
           'release.sass',
           'release.createUmdBundle',
+          'release.createFesmBundle',
           done);
 });
 
@@ -223,6 +224,26 @@ task('release.createUmdBundle', (done: Function) => {
       format: 'umd',
       moduleName: 'ionicBundle',
       dest: `${DIST_BUNDLE_ROOT}/ionic.umd.js`
+    });
+  });
+});
+
+task('release.createFesmBundle', (done: Function) => {
+  return rollup({
+    entry: DIST_BUILD_FESM_BUNDLE_ENTRYPOINT,
+    plugins: [
+      nodeResolve({
+        module: true,
+        jsnext: true,
+        main: true
+      }),
+      commonjs()
+    ]
+  }).then((bundle) => {
+    return bundle.write({
+      format: 'es',
+      moduleName: 'ionicBundle',
+      dest: `${DIST_BUNDLE_ROOT}/ionic.fesm.js`
     });
   });
 });
