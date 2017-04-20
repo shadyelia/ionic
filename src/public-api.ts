@@ -50,6 +50,7 @@ export { ToggleModule } from './components/toggle/toggle.module';
 export { ToolbarModule } from './components/toolbar/toolbar.module';
 export { TypographyModule } from './components/typography/typography.module';
 export { VirtualScrollModule } from './components/virtual-scroll/virtual-scroll.module';
+export * from './index';
 
 /**
  * Export Components/Directives

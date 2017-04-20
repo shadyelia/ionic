@@ -93,10 +93,9 @@ export function buildIonicAngularFesm(stripDebug: boolean, done: Function) {
         return;
       }
       // clean up any .ts files that remain as well as ngc metdata
-      deleteFiles([`${DIST_BUILD_FESM_ROOT}/**/*.ts`,
+      deleteFiles([
                    `${DIST_BUILD_FESM_ROOT}/node_modules`,
-                   `${DIST_BUILD_FESM_ROOT}/tsconfig.json`,
-                   `!${DIST_BUILD_FESM_ROOT}/**/*.d.ts`], done);
+                   `${DIST_BUILD_FESM_ROOT}/tsconfig.json`], done);
     });
   });
 }

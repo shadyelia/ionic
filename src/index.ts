@@ -1,4 +1,3 @@
-
 export { IonicApp } from './components/app/app-root';
 export { MenuController } from './components/app/menu-controller';
 export { ActionSheet } from './components/action-sheet/action-sheet';
@@ -168,4 +167,3 @@ export { registerModeConfigs } from './config/mode-registry';
 export { IonicGestureConfig } from './gestures/gesture-config';
 
 export { IonicModule, IonicPageModule, provideLocationStrategy } from './module';
-

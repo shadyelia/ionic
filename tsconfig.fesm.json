@@ -24,7 +24,7 @@
   "angularCompilerOptions": {
     "annotationsAs": "static fields",
     "annotateForClosureCompiler": true,
-    "flatModuleOutFile": "index.js",
+    "flatModuleOutFile": "taco.js",
     "flatModuleId": "ionic-angular"
   }
 }
