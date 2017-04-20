@@ -370,7 +370,6 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
    */
   @Input() virtualTrackBy: TrackByFn;
 
-
   constructor(
     private _iterableDiffers: IterableDiffers,
     private _elementRef: ElementRef,
@@ -406,6 +405,28 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   /**
    * @hidden
    */
+  firstRecord(): number {
+    const cells = this._cells;
+    if (cells.length > 0) {
+      return cells[0].record;
+    }
+    return 0;
+  }
+
+  /**
+   * @hidden
+   */
+  lastRecord(): number {
+    const cells = this._cells;
+    if (cells.length > 0) {
+      return cells[cells.length - 1].record;
+    }
+    return 0;
+  }
+
+  /**
+   * @hidden
+   */
   ngDoCheck() {
     // only continue if we've already initialized
     if (!this._init) {
@@ -420,8 +441,9 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
 
     let needClean = false;
     if (changes) {
+      var lastRecord = this.lastRecord() + 1;
       changes.forEachOperation((item, _, cindex) => {
-        if (item.previousIndex != null || (cindex < this._recordSize)) {
+        if (item.previousIndex != null || (cindex < lastRecord)) {
           needClean = true;
         }
       });
@@ -434,10 +456,13 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
     this.writeUpdate(needClean);
   }
 
+  /**
+   * @hidden
+   */
   readUpdate(needClean: boolean) {
     if (needClean) {
       // reset everything
-      console.debug(`virtual-scroll, readUpdate: slow path`);
+      console.debug('virtual-scroll, readUpdate: slow path');
       this._cells.length = 0;
       this._nodes.length = 0;
       this._itmTmp.viewContainer.clear();
@@ -449,8 +474,11 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
     }
   }
 
+  /**
+   * @hidden
+   */
   writeUpdate(needClean: boolean) {
-    console.debug(`virtual-scroll, writeUpdate`);
+    console.debug('virtual-scroll, writeUpdate need clean:', needClean);
     const data = this._data;
     const stopAtHeight = (data.scrollTop + data.renderHeight);
     data.scrollDiff = SCROLL_DIFFERENCE_MINIMUM + 1;
@@ -466,6 +494,9 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
     this.renderVirtual(needClean);
   }
 
+  /**
+   * @hidden
+   */
   private calcDimensions() {
     calcDimensions(this._data, this._elementRef.nativeElement,
       this.approxItemWidth, this.approxItemHeight,
@@ -556,7 +587,7 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   }
 
   /**
-   * @private
+   * @hidden
    */
   resize() {
     // only continue if we've already initialized
@@ -590,7 +621,7 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   }
 
   /**
-   * @private
+   * @hidden
    */
   private _stepChangeDetection() {
     // we need to do some change detection in this frame
@@ -609,7 +640,7 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   }
 
   /**
-   * @private
+   * @hidden
    */
   private _stepNoChanges() {
     const data = this._data;
@@ -660,7 +691,7 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   }
 
   /**
-   * @private
+   * @hidden
    */
   scrollUpdate(ev: ScrollEvent) {
     // set the scroll top from the scroll event
@@ -703,6 +734,7 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   }
 
   /**
+   * @hidden
    * NO DOM
    */
   private _listeners() {
@@ -723,6 +755,7 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
   }
 
   /**
+   * @hidden
    * DOM WRITE
    */
   private _setHeight(newVirtualHeight: number) {
@@ -747,6 +780,9 @@ export class VirtualScroll implements DoCheck, AfterContentInit, OnDestroy {
     }
   }
 
+  /**
+   * @hidden
+   */
   setElementClass(className: string, add: boolean) {
     this._renderer.setElementClass(this._elementRef.nativeElement, className, add);
   }
