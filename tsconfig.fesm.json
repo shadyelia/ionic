@@ -19,7 +19,7 @@
     "rewriteTsconfig": false
   },
   "files": [
-    "public-api.ts"
+    "index.ts"
   ],
   "angularCompilerOptions": {
     "annotationsAs": "static fields",
